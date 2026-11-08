@@ -17,4 +17,4 @@ This public sector data pipeline is engineered for high-value weekly recruitment
 - **Language:** Python 3.10+
 - **Parsing Engine:** BeautifulSoup4 / Requests Architecture
 - **Storage Core:** Standard I/O CSV Database Engine
-- **Proxy Framework:** Engineered for seamless integration with premium SOCKS5 residential proxy networks (e.g., anyIP.io / Bright Data)
+- **Proxy Framework:** Engineered for seamless integration with premium SOCKS5 residential proxy networks
