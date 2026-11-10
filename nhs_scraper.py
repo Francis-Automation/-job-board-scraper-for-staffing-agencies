@@ -4,141 +4,98 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.common.exceptions import TimeoutException
 
-print("🌐 Launching browser environment via Selenium...")
-driver = webdriver.Firefox()
+print("Launching browser...")
 
-# Targeted phrases for the search parameter strings
+options = webdriver.FirefoxOptions()
+options.page_load_strategy = "eager"
+driver = webdriver.Firefox(options=options)
+
 search_phrases = [
     "Newly qualified nurse",
     "Pre-registered nurse",
     "New Graduate Nurse",
-    "International registered nurse"
+    "Band 5 nurse"
 ]
 
 csv_filename = "nhs_nurse_jobs.csv"
 
-# Establish a single, pristine output CSV file with clean headers
-with open(csv_filename, mode="w", newline="", encoding="utf-8") as file:
-    writer = csv.writer(file)
-    writer.writerow(["Search Phrase", "Job Title", "Employer/Trust", "Salary", "Closing Date", "Direct Application Link"])
+with open(csv_filename, mode="w", newline="", encoding="utf-8") as f:
+    writer = csv.writer(f)
+    writer.writerow(["Search Phrase", "Job Title", "Trust", "Salary", "Closing Date", "Application Link"])
 
-print("🚀 INITIALIZING ALL-IN-ONE REAL-TIME FILTERING PIPELINE...")
+print("Starting NHS filter pipeline...")
 
 try:
-    driver.get("https://Beta.jobs.nhs.uk/candidate/search/results")
-    time.sleep(3)
-    
-    # Handle the cookie acceptance overlay via Selenium click commands
+    driver.get("https://beta.jobs.nhs.uk/candidate/search/results")
     try:
-        cookie_btn = WebDriverWait(driver, 5).until(
-            EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Accept analytics cookies')]"))
-        )
-        cookie_btn.click()
-        time.sleep(1.5)
-    except TimeoutException:
+        WebDriverWait(driver, 5).until(
+            EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Accept')]"))
+        ).click()
+    except:
         pass
 
     for phrase in search_phrases:
-        print(f"\n🎯 AUTOMATED TRACK RUNNING FOR: '{phrase}'")
-        
-        words = phrase.lower().split()
-        formatted_keyword = "+AND+".join(words)
-        base_url = f"https://Beta.jobs.nhs.uk/candidate/search/results?keyword={formatted_keyword}&sort=publicationDateDesc"
-        
-        for page_num in range(1, 501):
-            print(f"📊 Selenium scanning page {page_num}...")
-            
-            target_page_url = f"{base_url}&page={page_num}"
-            driver.get(target_page_url)
-            time.sleep(3.5)
-            
+        print(f"\nTarget: {phrase}")
+        formatted = "+AND+".join(phrase.lower().split())
+        base_url = f"https://beta.jobs.nhs.uk/candidate/search/results?keyword={formatted}&sort=publicationDateDesc"
+
+        for page in range(1, 51):  # 50 pages enough, 500 burns data
+            url = f"{base_url}&page={page}"
+            try:
+                driver.get(url)
+                time.sleep(2)
+            except TimeoutException:
+                continue
+
             if "Page not found" in driver.page_source:
                 break
-            
-            # Smooth scrolling down to render dynamic page layouts completely
-            driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.5);")
-            time.sleep(0.5)
-            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            time.sleep(1.0)
-            
-            # Extract target list items using specific CSS element mappings
-            job_cards = driver.find_elements(By.CSS_SELECTOR, "ul[data-testid='search-results-list'] > li, .nhsuk-card, li[class*='result']")
+
+            job_cards = driver.find_elements(By.CSS_SELECTOR, "li[data-testid='search-result'], div.nhsuk-card")
             if not job_cards:
-                job_cards = driver.find_elements(By.XPATH, "//h2/ancestor::li | //a[contains(@href, '/job-advert/')]/ancestor::li")
-            
+                job_cards = driver.find_elements(By.XPATH, "//a[contains(@href, '/job-advert/')]/ancestor::li")
+
             if not job_cards:
                 break
-                
-            # Open the CSV with buffering=1 so valid rows lock onto your hard drive instantly
-            with open(csv_filename, mode="a", newline="", encoding="utf-8", buffering=1) as file:
-                writer = csv.writer(file)
-                
+
+            with open(csv_filename, mode="a", newline="", encoding="utf-8") as f:
+                writer = csv.writer(f)
                 for card in job_cards:
                     try:
-                        # Extract the inner title header element link anchor
-                        try:
-                            link_element = card.find_element(By.CSS_SELECTOR, "h2 a, h3 a, a[href*='/job-advert/']")
-                        except NoSuchElementException:
+                        link_el = card.find_element(By.CSS_SELECTOR, "a[href*='/job-advert/']")
+                        job_title = link_el.text.strip()
+                        if not job_title:
                             continue
-                            
-                        job_title = link_element.text.strip()
-                        job_title_lower = job_title.lower().strip()
                         
-                        # ==========================================================
-                        # 🛑 LIVE FILTER 1: THE CRITICAL BAN LIST (Skips Senior/Doctors)
-                        # ==========================================================
-                        blacklist = [
-                            "senior", "sister", "charge", "manager", "lead", "advanced", "specialist", 
-                            "practitioner", "consultant", "deputy", "head", "trainer", "educator", 
-                            "receptionist", "clerk", "payroll", "gp", "doctor", "administrator",
-                            "registered nurse", "rn", "anp", "enp", "clinical specialist"
-                        ]
-                        
-                        # If title is exactly "registered nurse" or matches anything on the blacklist, ignore it!
-                        if job_title_lower == "registered nurse" or any(bad_word in job_title_lower for bad_word in blacklist):
-                            continue 
-                            
-                        # ==========================================================
-                        # ✅ LIVE FILTER 2: THE core SELECTION ALLOW LIST
-                        # ==========================================================
-                        whitelist = ["nurse", "nursing", "band 5", "pre-registered", "graduate", "junior", "staff nurse", "assistant"]
-                        if not any(good_word in job_title_lower for good_word in whitelist):
-                            continue # Ignore if it doesn't match an entry level designation
-                        
-                        # If it passes both filters, Selenium grabs the direct application URL address
-                        job_url = link_element.get_attribute("href")
-                        
-                        card_text = card.text or ""
-                        lines = [line.strip() for line in card_text.split("\n") if line.strip()]
-                        
-                        trust_name = "N/A"
-                        salary = "N/A"
-                        closing_date = "N/A"
-                        
-                        if len(lines) > 1:
-                            trust_name = lines[1]
-                            
-                        for text_line in lines:
-                            if "£" in text_line or "Salary:" in text_line:
-                                salary = text_line
-                            elif "Closing date:" in text_line or "Closes:" in text_line:
-                                closing_date = text_line
-                        
-                        # Write the clean match down to the CSV right away
-                        writer.writerow([phrase, job_title, trust_name, salary, closing_date, job_url])
-                        print(f"🌟 LIVE MATCH SAVED: {job_title}")
-                        
-                    except Exception:
-                        continue
-                        
-            print(f"✅ Clean page processing completed for Page {page_num}")
+                        title_lower = job_title.lower()
+                        card_text_lower = card.text.lower()
 
-except Exception as global_err:
-    print(f"\n❌ Pipeline Halt: {global_err}")
+                        # BLOCK senior roles only
+                        blacklist = ["senior", "sister", "charge", "matron", "manager", "lead", "head", "consultant", "advanced", "specialist", "deputy", "educator"]
+                        if any(b in title_lower for b in blacklist):
+                            continue
+
+                        # ALLOW - must be entry level
+                        if not ("band 5" in card_text_lower or "newly qualified" in title_lower or "pre-reg" in title_lower or "graduate" in title_lower or "newly qualified" in card_text_lower or "registered nurse" in title_lower or "staff nurse" in title_lower):
+                            continue
+
+                        job_url = link_el.get_attribute("href")
+                        lines = [l.strip() for l in card.text.split("\n") if l.strip()]
+                        
+                        trust = lines[1] if len(lines) > 1 else "N/A"
+                        salary = next((l for l in lines if "£" in l), "N/A")
+                        closing = next((l for l in lines if "Closing" in l or "Closes" in l), "N/A")
+
+                        writer.writerow([phrase, job_title, trust, salary, closing, job_url])
+                        print(f"  Saved: {job_title[:45]}")
+
+                    except:
+                        continue
+
+except Exception as e:
+    print(f"Error: {e}")
 
 finally:
-    print("\n🧹 Selenium extraction sequence complete. Data file is locked and saved.")
-    input("⏸ Press Enter directly inside this terminal window to close the browser... ")
+    print(f"\nCompleted. Saved to {csv_filename}")
     driver.quit()
