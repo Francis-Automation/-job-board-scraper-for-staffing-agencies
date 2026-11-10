@@ -1,20 +1,30 @@
-# National Health Service (NHS) Automated Healthcare Job Scraping Pipeline
+# NHS Band 5 Healthcare Job Tracking Pipeline
 
-An enterprise-grade, high-concurrency web scraping and data harvesting platform built to safely extract real-time healthcare vacancy listings, salary baselines, and departmental recruitment rosters directly from the official UK NHS job portal.
+Automated job monitoring system for UK NHS vacancies — focused on entry-level nursing roles.
 
-## 🚀 Architectural Core Features
-- **Public Sector Fire-Wall Evasion:** Specifically engineered to navigate highly protected government network layouts without triggering rate limits or continuous access blocks.
-- **Dynamic HTML DOM Restructuring:** Utilizes robust BeautifulSoup structural parsing arrays to handle shifting table designs, sanitizing mixed text nodes instantly.
-- **Automated Salary Baseline Analytics:** Extracts and formats loose compensation ranges directly into clean, standardized database metrics for localized recruitment market analysis.
-- **Enterprise Network Isolation Layers:** Designed to seamlessly decouple data collection blocks from local ISP network paths, allowing direct routing through premium global proxy gateways.
+## Target Roles
+- Newly Qualified Nurse
+- Pre-registered Nurse  
+- New Graduate Nurse
+- Band 5 Nurse
 
-## 🗓️ Corporate Workflow & Retainer Cadence
-This public sector data pipeline is engineered for high-value weekly recruitment tracking operations:
-1. **Automated Weekly Synchronizations:** Deploys deep directory sweeps to map newly posted healthcare job allocations ahead of Monday morning corporate hiring cycles.
-2. **Pristine Database Compilation:** Cleans, isolates, and populates custom structural data sheets (`nhs_listings.csv`) completely ready for direct injection into agency recruitment databases.
+## Features
+- Scans beta.jobs.nhs.uk across multiple search phrases
+- Smart filtering: Excludes Senior, Sister, Matron, Manager, Lead, Consultant, Advanced roles
+- Retains Band 5 / Newly Qualified / Graduate / Pre-registered only
+- Extracts Job Title, Trust/Employer, Salary, Closing Date, Direct Application Link
+- CSV output ready for recruitment reporting
 
-## 🛠️ Technology Stack
-- **Language:** Python 3.10+
-- **Parsing Engine:** BeautifulSoup4 / Requests Architecture
-- **Storage Core:** Standard I/O CSV Database Engine
-- **Proxy Framework:** Engineered for seamless integration with premium SOCKS5 residential proxy networks
+## Workflow
+- Weekly automated scans for new vacancies
+- CSV database: nhs_nurse_jobs.csv
+- Ready for agency tracking and candidate matching
+
+## Tech Stack
+Python, Selenium WebDriver, Firefox
+
+## Usage
+pip install selenium
+python nhs_job_tracker.py
+
+Output: nhs_nurse_jobs.csv
