@@ -14,7 +14,9 @@ Automated job monitoring system built to help UK staffing agencies track Band 5 
 
 ### 3. Terminal Execution Engine
 ![Terminal](Screenshot_2026-10-25_01-19-53.png)
-*Python + Selenium processing 4 tracks: 'Newly qualified nurse', 'Pre-registered nurse', 'New Graduate Nurse', 'International registered nurse'*
+*Python + Selenium processing 4 tracks: Newly qualified nurse, Pre-registered nurse, New Graduate Nurse, International registered nurse*
+
+---
 
 ## Why Agencies Use This
 
@@ -36,9 +38,10 @@ Automated job monitoring system built to help UK staffing agencies track Band 5 
 Python, Selenium WebDriver, Firefox, VS Code
 
 ## Quick Start
-```bash
-pip install selenium
-python nhs_scraper.py
+
+    pip install selenium
+    python nhs_scraper.py
+
 ## Built by Francis Automation
 
 I build custom sourcing automations for UK agencies.
