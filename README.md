@@ -4,50 +4,38 @@
 
 Automated job monitoring system built to help UK staffing agencies track Band 5 nursing vacancies and match candidates faster.
 
-![CSV Output](screenshots/output.png)
-*Automated CSV output: Job Title, Trust, Salary, Closing Date, Application Link*
+### 1. CSV Output - Ready for ATS Import
+![CSV Output](Screenshot_2026-10-25_01-21-11.png)
+*26 Newly Qualified roles captured: Job Title, Trust, Salary, Closing Date, Direct Link - from VS Code*
+
+### 2. Live Website Scanning
+![Website Scan](Screenshot_2026-10-25_01-20-34.png)
+*Live scraping beta.jobs.nhs.uk - Community Matron £48k+ captured + Terminal showing MATCH RECORDED*
+
+### 3. Terminal Execution Engine
+![Terminal](Screenshot_2026-10-25_01-19-53.png)
+*Python + Selenium processing 4 tracks: 'Newly qualified nurse', 'Pre-registered nurse', 'New Graduate Nurse', 'International registered nurse'*
 
 ## Why Agencies Use This
 
-**Problem:** Agencies spend 10+ hrs/week manually searching NHS Jobs for newly qualified roles before they close.
+**Problem:** UK agencies spend 10+ hrs/week manually searching NHS Jobs for newly qualified roles.
 
 **Solution:** Automated weekly scan that delivers ready-to-use CSV for candidate matching.
 
-**Result:** Submit candidates faster, never miss closing dates, save recruiter time.
+## Target Roles Filter
 
-## Target Roles Tracked
+- ✅ INCLUDE: Newly Qualified Nurse / Pre-registered Nurse / Band 5 Nurse
+- ❌ EXCLUDE: Senior, Sister, Matron, Manager, Lead roles (Smart filter)
 
-- Newly Qualified Nurse
-- Pre-registered Nurse  
-- New Graduate Nurse
-- Band 5 Nurse / Band 5 Staff Nurse
+## Output
 
-Smart filter **EXCLUDES**: Senior, Sister, Matron, Manager, Lead, Consultant, Advanced — keeping only entry-level roles agencies need.
-
-## Features
-
-- ✅ Scans beta.jobs.nhs.uk across multiple search phrases
-- ✅ Smart filtering for Band 5 only
-- ✅ Extracts: Job Title, Trust/Employer, Salary, Closing Date, Direct Application Link
-- ✅ CSV output: `nhs_nurse_jobs.csv` — ready for reporting & ATS import
-- ✅ Weekly automation ready
-
-![Terminal Run](screenshots/terminal.png)
-*Pipeline running — weekly automated scan*
-
-## Output Example
-
-| Job Title | Trust | Salary | Closing Date | Link |
-|---|---|---|---|---|
-| Band 5 Newly Qualified Nurse | Manchester University NHS | £28k-£34k | 2026-11-20 | jobs.nhs.uk/... |
-| Pre-registered Nurse | Leeds Teaching Hospitals | £28k | 2026-11-18 | jobs.nhs.uk/... |
+`nhs_nurse_jobs.csv` - 26+ jobs with Title, Employer, Trust, Salary, Closing Date, Direct Application Link
 
 ## Tech Stack
 
-Python, Selenium WebDriver, Firefox, CSV
+Python, Selenium WebDriver, Firefox, VS Code
 
 ## Quick Start
-
 ```bash
 pip install selenium
-python nhs_job_tracker.py
+python nhs_scraper.py
