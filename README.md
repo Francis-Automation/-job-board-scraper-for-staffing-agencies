@@ -39,3 +39,12 @@ Python, Selenium WebDriver, Firefox, VS Code
 ```bash
 pip install selenium
 python nhs_scraper.py
+## Built by Francis Automation
+
+I build custom sourcing automations for UK agencies.
+
+**Services:** NHS Job Pipeline | Talent Sourcing | Lead Generation Automation
+
+**Contact:** GitHub @Francis-Automation | LinkedIn - Francis Automation
+
+**For Agencies:** DM me on LinkedIn to automate your NHS Jobs sourcing.
