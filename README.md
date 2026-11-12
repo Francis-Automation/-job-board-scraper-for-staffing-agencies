@@ -1,53 +1,21 @@
-# NHS Band 5 Job Tracking Pipeline for UK Staffing Agencies
+## 👨‍💻 About Me
 
-> **For UK Healthcare Recruiters:** Stop checking beta.jobs.nhs.uk manually. This pipeline automates it.
+**Francis | UK Staffing Automation Specialist**
+Custom automation for UK recruitment agencies
 
-Automated job monitoring system built to help UK staffing agencies track Band 5 nursing vacancies and match candidates faster.
+I help agencies automate NHS Jobs → Bullhorn / Mercury / Voyager and save 10-15 hrs/week.
 
-### 1. CSV Output - Ready for ATS Import
-![CSV Output](Screenshot_2026-10-25_01-21-11.png)
-*26 Newly Qualified roles captured: Job Title, Trust, Salary, Closing Date, Direct Link - from VS Code*
+**Portfolio:**
+- LinkedIn: `linkedin.com/in/francis-automation`
+- GitHub: `@Francis-Automation`
 
-### 2. Live Website Scanning
-![Website Scan](Screenshot_2026-10-25_01-20-34.png)
-*Live scraping beta.jobs.nhs.uk - Community Matron £48k+ captured + Terminal showing MATCH RECORDED*
+**Contact for Agencies:**
+📩 Email: Emechebefrancis8@gmail.com
+💬 DM on LinkedIn with "NHS PIPELINE"
 
-### 3. Terminal Execution Engine
-![Terminal](Screenshot_2026-10-25_01-19-53.png)
-*Python + Selenium processing 4 tracks: Newly qualified nurse, Pre-registered nurse, New Graduate Nurse, International registered nurse*
+**I build:**
+- NHS Jobs → ATS Automation
+- Reed / Indeed → Mercury / Voyager
+- n8n + Python Scraping Pipelines
 
----
-
-## Why Agencies Use This
-
-**Problem:** UK agencies spend 10+ hrs/week manually searching NHS Jobs for newly qualified roles.
-
-**Solution:** Automated weekly scan that delivers ready-to-use CSV for candidate matching.
-
-## Target Roles Filter
-
-- ✅ INCLUDE: Newly Qualified Nurse / Pre-registered Nurse / Band 5 Nurse
-- ❌ EXCLUDE: Senior, Sister, Matron, Manager, Lead roles (Smart filter)
-
-## Output
-
-`nhs_nurse_jobs.csv` - 26+ jobs with Title, Employer, Trust, Salary, Closing Date, Direct Application Link
-
-## Tech Stack
-
-Python, Selenium WebDriver, Firefox, VS Code
-
-## Quick Start
-
-    pip install selenium
-    python nhs_scraper.py
-
-## Built by Francis Automation
-
-I build custom sourcing automations for UK agencies.
-
-**Services:** NHS Job Pipeline | Talent Sourcing | Lead Generation Automation
-
-**Contact:** GitHub @Francis-Automation | LinkedIn - Francis Automation
-
-**For Agencies:** DM me on LinkedIn to automate your NHS Jobs sourcing.
+⭐ Ready to automate your sourcing? Email me.
